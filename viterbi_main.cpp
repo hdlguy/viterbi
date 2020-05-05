@@ -81,6 +81,10 @@ int ParseInt(const std::string& s) {
   return i;
 }
 
+
+
+
+
 void ViterbiMain(const std::vector<std::string>& args) {
   if (args.size() < 4) {
     std::cout << "Insufficient number of arguments." << std::endl;
@@ -134,6 +138,10 @@ void ViterbiMain(const std::vector<std::string>& args) {
     std::cout << codec.Decode(bits) << std::endl;
   }
 }
+
+
+
+
 
 int main(int argc, char** argv) {
   std::vector<std::string> args = ParseFlags(argc, argv);

@@ -31,10 +31,10 @@ viterbi_test.o: viterbi_test.cpp viterbi.h
 viterbi_test: viterbi_test.o viterbi.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
-test_waas.o: test_waas.cpp 
+test_waas.o: test_waas.cpp viterbi.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $<
 
-test_waas: test_waas.o
+test_waas: test_waas.o viterbi.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
 .PHONY: all clean test

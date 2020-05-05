@@ -1,10 +1,21 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdint.h>
+//#include <stdint.h>
+#include <cstdint>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "viterbi.h"
+
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 int main () 
 {
@@ -20,18 +31,29 @@ int main ()
     uint8_t* waasdat = (uint8_t*)malloc((size_t) 1*filesize);
     fread(waasdat, 1, filesize, fp);
 
-    // convert LLR data to binary uint8_t data
-    uint8_t* waassym = (uint8_t*)malloc((size_t) 2*filesize);
+    // convert LLR data to string
+    char* waassym = (char*)malloc((size_t) 2*filesize);
     for (int i=0; i<filesize; i++){
-        waassym[i*2+0] = ((waasdat[i])>>2)&1;  // bit 2 of the low nibble
-        waassym[i*2+1] = ((waasdat[i])>>6)&1;  // bit 2 of the high nibble
+        if (1 == ((waasdat[i])>>2)&1) waassym[i*2+0] = '1'; else waassym[i*2+0] = '0';
+        if (1 == ((waasdat[i])>>6)&1) waassym[i*2+1] = '1'; else waassym[i*2+1] = '0';
     }
+    //const std::string& bits = "00001110111111110011000111000000";
+    //const std::string bits = "00001110111111110011000111000000";
+    //const std::string bits ((size_t)(filesize*2), 'x');
+    const std::string bits (waassym, (size_t)(filesize*2));  // ViterbiCodec::Decode wants C++ string.
 
-
-
-
+    // set the Viterbi constraint length and polynomials.
+    const int constraint = 7;
+    std::vector<int> polynomials;
+    polynomials.push_back(121);
+    polynomials.push_back( 91);
+    for (int i = 0; i < polynomials.size(); i++) polynomials[i] = ReverseBits(constraint, polynomials[i]);
 
     // call the Viterbi decoder
+    ViterbiCodec codec(constraint, polynomials);
+    //std::cout << codec.Decode(bits) << std::endl;
+    std::string result_string = codec.Decode(bits);
+    std::cout << result_string << std::endl;
 
     
     // find sync pattern (if not found rerun Viterbi with other two bit framing)

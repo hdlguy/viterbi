@@ -157,6 +157,8 @@ void ViterbiCodec::UpdatePathMetrics(const std::string& bits, std::vector<int>* 
   trellis->push_back(new_trellis_column);
 }
 
+
+
 std::string ViterbiCodec::Decode(const std::string& bits) const {
   // Compute path metrics and generate trellis.
   Trellis trellis;
@@ -184,4 +186,7 @@ std::string ViterbiCodec::Decode(const std::string& bits) const {
   // Remove (constraint_ - 1) flushing bits.
   return decoded.substr(0, decoded.size() - constraint_ + 1);
 }
+
+
+
 
