@@ -162,24 +162,21 @@ void ViterbiCodec::UpdatePathMetrics(const std::string& bits,
 std::string ViterbiCodec::Decode(const std::string& bits) const {
   // Compute path metrics and generate trellis.
   Trellis trellis;
-  std::vector<int> path_metrics(1 << (constraint_ - 1),
-                                std::numeric_limits<int>::max());
+  std::vector<int> path_metrics(1 << (constraint_ - 1), std::numeric_limits<int>::max());
   path_metrics.front() = 0;
   for (int i = 0; i < bits.size(); i += num_parity_bits()) {
     std::string current_bits(bits, i, num_parity_bits());
     // If some bits are missing, fill with trailing zeros.
     // This is not ideal but it is the best we can do.
     if (current_bits.size() < num_parity_bits()) {
-      current_bits.append(
-          std::string(num_parity_bits() - current_bits.size(), '0'));
+      current_bits.append( std::string(num_parity_bits() - current_bits.size(), '0'));
     }
     UpdatePathMetrics(current_bits, &path_metrics, &trellis);
   }
 
   // Traceback.
   std::string decoded;
-  int state = std::min_element(path_metrics.begin(), path_metrics.end()) -
-              path_metrics.begin();
+  int state = std::min_element(path_metrics.begin(), path_metrics.end()) - path_metrics.begin();
   for (int i = trellis.size() - 1; i >= 0; i--) {
     decoded += state >> (constraint_ - 2) ? "1" : "0";
     state = trellis[i][state];
