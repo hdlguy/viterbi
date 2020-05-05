@@ -1,0 +1,4 @@
+./viterbi_main --reverse_polynomials --encode 7 121 91 0010001000
+
+./viterbi_main --reverse_polynomials  7 121 91 00001110111111110011000111000000
+

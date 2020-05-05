@@ -144,9 +144,7 @@ std::pair<int, int> ViterbiCodec::PathMetric(
   }
 }
 
-void ViterbiCodec::UpdatePathMetrics(const std::string& bits,
-                                     std::vector<int>* path_metrics,
-                                     Trellis* trellis) const {
+void ViterbiCodec::UpdatePathMetrics(const std::string& bits, std::vector<int>* path_metrics, Trellis* trellis) const {
   std::vector<int> new_path_metrics(path_metrics->size());
   std::vector<int> new_trellis_column(1 << (constraint_ - 1));
   for (int i = 0; i < path_metrics->size(); i++) {
