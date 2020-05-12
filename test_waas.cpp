@@ -42,6 +42,7 @@ int main ()
         if (1 == ((waasdat[i])>>6)&1) waassym[i*2+1] = '1'; else waassym[i*2+1] = '0';
     }
     string bits (waassym, (size_t)(filesize*2));  // ViterbiCodec::Decode wants C++ string.
+    //bits.insert(0,1,'0'); // insert a zero at beginning to get other framing.
 
     //char waassym[] = {'0','0','0','0','1','1','1','0','1','1','1','1','1','1','1','1','0','0','1','1','0','0','0','1','1','1','0','0','0','0','0','0'};
     //string bits (waassym, (size_t)32);
@@ -66,7 +67,7 @@ int main ()
     string p_a("01010011"); string p_b("10011010"); string p_c("11000110");
 
 /*
-    // faux data
+    // faux preamble words
     for (int i=0; i<result_string.length()/750; i++) {
         result_string.replace(i*750+  0, 8, p_a);
         result_string.replace(i*750+250, 8, p_b);
@@ -74,7 +75,6 @@ int main ()
     }
 */
 
-    
     cout << "searching for preamble patterns in positive results\n";
     for (int i=0; i<result_string.length()-750; i++) {
         if ( (0==result_string.substr(i+0,8).compare(p_a)) && (0==result_string.substr(i+250,8).compare(p_b)) && (0==result_string.substr(i+500,8).compare(p_c)) ) {
@@ -86,6 +86,7 @@ int main ()
     string negbits (bits); 
     for (int i=0; i<negbits.length(); i++) if (negbits[i]=='0') negbits[i]='1'; else negbits[i]='0';
     // run viterbi decoder
+    //std::cout << negbits << std::endl;
     result_string = codec.Decode(negbits);
 
     cout << "searching for preamble patterns in negative results\n";
@@ -103,7 +104,7 @@ int main ()
 
     
     free(waasdat);
-    //free(waassym);
+    free(waassym);
 }
 
 
