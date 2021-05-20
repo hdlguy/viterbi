@@ -18,8 +18,8 @@ p =     zeros(N,2);
 state = zeros(N,k);
 
 for i=1:N-1
-    p(i,1) = mod(sum(and(G1, state(i,:))),2);
-    p(i,2) = mod(sum(and(G2, state(i,:))),2);
+    p(i,1) = mod(0+sum(and(G1, state(i,:))),2);
+    p(i,2) = mod(1+sum(and(G2, state(i,:))),2); % binary inverted
     state(i+1,:) = [s(i) state(i,1:(k-1))];
 endfor
 
